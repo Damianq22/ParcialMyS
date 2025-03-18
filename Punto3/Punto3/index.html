@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de Nómina | UPC</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+        width: 100%;
+      }
+
+      main {
+        width: 80%;
+        max-width: 800px;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+        border-radius: 10px;
+      }
+
+      h2,
+      h3 {
+        color: #333;
+      }
+      input[type=number] {
+        width: 100%;
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      .result {
+        background-color: rgb(83, 206, 83);
+        padding: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        color: black;
+      }
+
+      select {
+        width: 100%;
+      }
+
+      /* Estilos para la ventana modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 10px;
+        border: 1px solid #888;
+        width: 60%;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .close,
+      .accept {
+        color: #aaa;
+        float: right;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus,
+      .accept:hover,
+      .accept:focus {
+        color: black;
+        text-decoration: none;
+      }
+
+      .accept {
+        float: none;
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        width: 15%;
+        border-radius: 5px;
+      }
+
+      .modal-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Calculadora de Nómina Docente de Planta UPC</h1>
+      <img
+        src="asssets/img/UPC.png"
+        alt="Icono"
+        style="width: 100px"
+        height="100px"
+      />
+    </header>
+
+    <main id="titulos">
+      <div>
+        <h2>1.Títulos universitarios</h2>
+        <p>-Titulos de pregrado</p>
+        <form action="">
+          <label for="pregrado">
+            <input type="radio" name="titulo" id="pregrado" value="medicina" />
+            En Medicina Humana o composición Musical
+          </label>
+          <br />
+          <label for="otroPregrado">
+            <input
+              type="radio"
+              name="titulo"
+              id="otroPregrado"
+              value="otra"
+              checked="true"
+            />
+            Otra área
+          </label>
+          <br />
+        </form>
+        <p>-Titulos de Postgrados</p>
+
+        <table>
+          <tr>
+            <td>
+              <label for="clinicas"
+                >Clínicas en Medicina Humana y Odontología</label
+              >
+            </td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="clinicas"
+                placeholder="Años"
+                oninput="validarNumeros('clinicas')"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="otrasEspecializaciones"
+                >Otras Especializaciones</label
+              >
+            </td>
+
+            <td>
+              <select id="otrasEspecializaciones" onchange="generarInputsEspecializaciones()"><option value="0" onchange="">
+                Seleccione</option><option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <table>
+                <tr id="contenedorEspecializaciones"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="maestrias">Maestrías</label></td>
+            <td>
+              <select id="maestrias" >
+                <option value="0">Seleccione</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="doctorados">Doctorados</label></td>
+            <td>
+              <select id="doctorados" onchange="validarEntrada('doctorados')">
+                <option value="0">Seleccione</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+        <label for="">
+          Doctorado con posterioridad al primero (1°) de enero de 1998
+          <input type="checkbox" name="" id="posterior1998" disabled />
+        </label>
+        <p id="parrafo"></p>
+      </div>
+      <div>
+        <h2>2.Categoria del docente</h2>
+        <form action="">
+          <label for="">
+            <input type="radio" name="categoria" value="37" checked/>Instructor o
+            Profesor Auxiliar, o Instructor Asistente
+          </label>
+          <br />
+          <label for="">
+            <input type="radio" name="categoria" value="58" />Profesor Asistente
+          </label>
+          <br />
+          <label for="">
+            <input type="radio" name="categoria" value="74" />Profesor Asociado
+          </label>
+          <br />
+          <label for="">
+            <input type="radio" name="categoria" value="96" />Profesor Titular
+          </label>
+          <br />
+        </form>
+      </div>
+
+      <div>
+        <h2>3.Experiencia calificada</h2>
+        <label for="antes2002"
+          >Docentes que estaban vinculados antes del 8 de enero de 2002</label
+        >
+        <input type="checkbox" name="" id="antes2002" />
+        <br /><br />
+
+        <table>
+          <tr>
+            <th>Experiencia</th>
+            <th>Tiempo Completo (años)</th>
+            <th>Medio Tiempo (años)</th>
+            <th>Tiempo Parcial (años)</th>
+          </tr>
+          <tr>
+            <td>Investigativa (Centro investigaciones)</td>
+            <td>
+              <input
+                type="number"
+                name="investigativa_tc"
+                id="investigativa_tc"
+               oninput="validarNumeros('investigativa_tc')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="investigativa_mt"
+                id="investigativa_mt"
+                oninput="validarNumeros('investigativa_mt')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="investigativa_tp"
+                id="investigativa_tp"
+                oninput=" validarNumeros('investigativa_tp')"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Docente</td>
+            <td>
+              <input
+                type="number"
+                name="docente_tc"
+                id="docente_tc"
+                oninput="validarNumeros('docente_tc')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="docente_mt"
+                id="docente_mt"
+                oninput=" validarNumeros('docente_mt')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="docente_tp"
+                id="docente_tp"
+                oninput="validarNumeros('docente_tp')"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Cargos Dirección Académica</td>
+            <td>
+              <input
+                type="number"
+                name="cargos_tc"
+                id="cargos_tc"
+                oninput="validarNumeros('cargos_tc')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="cargos_mt"
+                id="cargos_mt"
+                oninput="validarNumeros('cargos_mt')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="cargos_tp"
+                id="cargos_tp"
+                oninput=" validarNumeros('cargos_tp')"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Profesional diferente a docente</td>
+            <td>
+              <input
+                type="number"
+                name="profesional_tc"
+                id="profesional_tc"
+                oninput="validarNumeros('profesional_tc')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="profesional_mt"
+                id="profesional_mt"
+                oninput="validarNumeros('profesional_mt')"
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                name="profesional_tp"
+                id="profesional_tp"
+                oninput="validarNumeros('profesional_tp')"
+              />
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <h2>4. La productividad académica</h2>
+        <table>
+          <tr>
+            <th>Artículos tradicionales("fullpaper")</th>
+            <th>Número de artículos</th>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS A1</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="A1"
+                oninput="generarInputsAutores('A1'); validarNumeros('A1')"
+              />
+              <br />
+              <table>
+                <tr id="contenedorA1"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS A2</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="A2"
+                oninput="generarInputsAutores('A2'); validarNumeros('A2')"
+              />
+              <table>
+                <tr id="contenedorA2"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS B</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="B"
+                oninput="generarInputsAutores('B'); validarNumeros('B')"
+              />
+              <table>
+                <tr id="contenedorB"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS C</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="C"
+                oninput="generarInputsAutores('C'); validarNumeros('C')"
+              />
+              <table>
+                <tr id="contenedorC"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <table>
+          <tr>
+            <th>Artículo corto</th>
+            <th>Número de artículos</th>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS A1</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="A1_"
+                oninput="generarInputsAutores('A1_'); validarNumeros('A1_')"
+              />
+              <table>
+                <tr id="contenedorA1_"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS A2</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="A2_"
+                oninput="generarInputsAutores('A2_'); validarNumeros('A2_')"
+              />
+              <table>
+                <tr id="contenedorA2_"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS B</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="B_"
+                oninput="generarInputsAutores('B_'); validarNumeros('B_')"
+              />
+              <table>
+                <tr id="contenedorB_"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS C</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="C_"
+                oninput="generarInputsAutores('C_'); validarNumeros('C_')"
+              />
+              <table>
+                <tr id="contenedorC_"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <table>
+          <tr>
+            <th>
+              Reportes de Casos, Revisión de Temas, Carta al Editor o Editorial
+            </th>
+            <th>Número de artículos</th>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS A1</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="A1__"
+                oninput="generarInputsAutores('A1__'); validarNumeros('A1__')"
+              />
+              <table>
+                <tr id="contenedorA1__"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS A2</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="A2__"
+                oninput="generarInputsAutores('A2__'); validarNumeros('A2__')"
+              />
+              <table>
+                <tr id="contenedorA2__"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS B</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="B__"
+                oninput="generarInputsAutores('B__'); validarNumeros('B__')"
+              />
+              <table>
+                <tr id="contenedorB__"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>En revistas indexadas por MINCIENCIAS C</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="C__"
+                oninput="generarInputsAutores('C__'); validarNumeros('C__')"
+              />
+              <table>
+                <tr id="contenedorC__"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <table>
+          <tr>
+            <th>Producción de Videos Cinematográficos o Fonográficos</th>
+            <th>Número de trabajos</th>
+          </tr>
+          <tr>
+            <td>Difusión de Impacto Internacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="internacionalVideos"
+                oninput="generarInputsAutores('internacionalVideos'); validarNumeros('internacionalVideos')"
+              />
+              <table>
+                <tr id="contenedorinternacionalVideos"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Difusión de Impacto Nacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="nacionalVideos"
+                oninput="generarInputsAutores('nacionalVideos'); validarNumeros('nacionalVideos')"
+              />
+              <table>
+                <tr id="contenedornacionalVideos"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Difusión de Impacto Internacional(Documental)</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="internacionalDocumental"
+                oninput="generarInputsAutores('internacionalDocumental'); validarNumeros('internacionalDocumental')"
+              />
+              <table>
+                <tr id="contenedorinternacionalDocumental"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Difusión de Impacto Nacional(Documental)</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="nacionalDocumental"
+                oninput="generarInputsAutores('nacionalDocumental'); validarNumeros('nacionalDocumental')"
+              />
+              <table>
+                <tr id="contenedornacionalDocumental"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <table>
+          <tr>
+            <td>Libros que resultan de una labor de investigación</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="librosInvestigacion"
+                placeholder="Numero de libros"
+                oninput="generarInputsAutores('librosInvestigacion'); validarNumeros('librosInvestigacion')"
+              />
+              <table>
+                <tr id="contenedorlibrosInvestigacion"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Libros texto</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="librosTexto"
+                placeholder="Numero de libros"
+                oninput="generarInputsAutores('librosTexto'); validarNumeros('librosTexto')"
+              />
+              <table>
+                <tr id="contenedorlibrosTexto"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Libros de ensayo</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="librosEnsayo"
+                placeholder="Numero de libros"
+                oninput="generarInputsAutores('librosEnsayo'); validarNumeros('librosEnsayo')"
+              />
+              <table>
+                <tr id="contenedorlibrosEnsayo"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Premios nacionales o internacionales</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="premios"
+                placeholder="Numero de premios"
+                oninput="generarInputsAutores('premios'); validarNumeros('premios')"
+              />
+              <table>
+                <tr id="contenedorpremios"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Patentes</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="patentes"
+                placeholder="Numero de patentes"
+                oninput="generarInputsAutores('patentes'); validarNumeros('patentes')"
+              />
+              <table>
+                <tr id="contenedorpatentes"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Traducciones de libros</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="traducciones"
+                placeholder="Numero de libros"
+                oninput="generarInputsAutores('traducciones'); validarNumeros('Traducciones')"
+              />
+              <table>
+                <tr id="contenedortraducciones"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <br />
+        <table>
+          <tr>
+            <th>Obras Artísticas</th>
+            <th>Número de obras</th>
+          </tr>
+          <tr>
+            <td><b>- Obras de creación original artística</b></td>
+          </tr>
+          <tr>
+            <td>De impacto y trascendencia internacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="impactoInternacional"
+                oninput="generarInputsAutores('impactoInternacional'); validarNumeros('impactoInternacional')"
+              />
+              <table>
+                <tr id="contenedorimpactoInternacional"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>De impacto y trascendencia nacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="impactoNacional"
+                oninput="generarInputsAutores('impactoNacional'); validarNumeros('impactoNacional')"
+              />
+              <table>
+                <tr id="contenedorimpactoNacional"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td><b>- Obras de creación complementaria o de apoyo</b></td>
+          </tr>
+          <tr>
+            <td>De impacto y trascendencia internacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="complementariaInternacional"
+                oninput="generarInputsAutores('complementariaInternacional'); validarNumeros('complementariaInternacional')"
+              />
+              <table>
+                <tr id="contenedorcomplementariaInternacional"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>De impacto y trascendencia nacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="complementariaNacional"
+                oninput="generarInputsAutores('complementariaNacional'); validarNumeros('complementariaNacional')"
+              />
+              <table>
+                <tr id="contenedorcomplementariaNacional"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td><b>- Interpretación</b></td>
+          </tr>
+          <tr>
+            <td>De impacto y trascendencia internacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="interpretacionInternacional"
+                oninput="generarInputsAutores('interpretacionInternacional'); validarNumeros('interpretacionInternacional')"
+              />
+              <table>
+                <tr id="contenedorinterpretacionInternacional"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>De impacto y trascendencia nacional</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="interpretacionNacional"
+                oninput="generarInputsAutores('interpretacionNacional'); validarNumeros('interpretacionNacional')"
+              />
+              <table>
+                <tr id="contenedorinterpretacionNacional"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <table>
+          <tr>
+            <th>Producción Técnica</th>
+            <th>Número de obras</th>
+          </tr>
+          <tr>
+            <td>Innovación tecnológica</td>
+            <td>
+                <input type="number" name="" id="innovacion" oninput="generarInputsAutores('innovacion'); validarNumeros('innovacion')">
+              <table>
+                <tr id="contenedorinnovacion"></tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Adaptación tecnológica</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="adaptacion"
+                oninput="generarInputsAutores('adaptacion'); validarNumeros('adaptacion')"
+              />
+              <table>
+                <tr id="contenedoradaptacion"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <table>
+          <tr>
+            <td>Producción de Software</td>
+            <td>
+              <input
+                type="number"
+                name=""
+                id="software"
+                oninput="generarInputsAutores('software'); validarNumeros('Software')"
+              />
+              <table>
+                <tr id="contenedorsoftware"></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="result" id="resultado">
+        <h3>Resultado</h3>
+        <p>Valor Punto $20.895</p>
+        <p id="Puntaje Titulos">Puntaje Titulos:</p>
+        <p id="Puntaje Categoria">Puntaje Categoria Docente:</p>
+        <p id="Puntaje Experiencia">Puntaje Experiencia Calificad: </p>
+        <p id="Puntaje Produccion">Puntaje Producción Academica:</p>
+        <p id="Puntaje Total">Puntaje Total:</p>
+        <p id="SalarioTotal">Salario: </p>
+
+        <input type="button" value="Calcular Salario" onclick="calcularTotal()" >
+      </div>
+
+      <!-- Modal -->
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="modal-title">Error</div>
+          <p id="modalText"></p>
+          <button class="accept">Aceptar</button>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script src="asssets/js/calculoTotal.js"></script>
+ 
+  <script>
+    function generarInputsAutores(tipo) {
+      const tr = document.getElementById("contenedor" + tipo);
+      const th = document.createElement("th");
+      tr.innerHTML = "";
+      const cantidad = parseInt(document.getElementById(tipo).value) || 0;
+      for (let i = 1; i <= cantidad; i++) {
+        let input = document.createElement("input");
+        input.type = "number";
+        input.id = tipo + i;
+        input.oninput = function () {
+          validarNumeros(input.id);
+        };
+        input.placeholder = "Número de autores de la obra" + i;
+        tr.appendChild(input);
+      }
+    }
+    function generarInputsEspecializaciones(){
+        const tr = document.getElementById("contenedorEspecializaciones");
+        const cantidad = parseInt(document.getElementById("otrasEspecializaciones").value) || 0;
+        tr.innerHTML = "";
+        for (let i = 1; i <= cantidad; i++) {
+            let input = document.createElement("input");
+            input.type = "number";
+            input.id = "especializacion" + i;
+            input.oninput = function () {
+            validarNumeros(input.id);
+            };
+            input.placeholder = "Años de especialización" + i;
+            tr.appendChild(input);
+        }
+    }
+  </script>
+  <script>
+    function validarNumeros(id) {
+      const input = document.getElementById(id);
+      if (input.value < 0) {
+        mostrarModal("El valor no puede ser menor que cero.");
+        input.value = "";
+      }
+    }
+
+    function mostrarModal(mensaje) {
+      const modal = document.getElementById("myModal");
+      const span = document.getElementsByClassName("close")[0];
+      const acceptButton = document.getElementsByClassName("accept")[0];
+      document.getElementById("modalText").innerText = mensaje;
+      modal.style.display = "block";
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+      acceptButton.onclick = function () {
+        modal.style.display = "none";
+      };
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    }
+  </script>
+</html>
