@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Nómina Docentes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+        }
+        main {
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+       
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .result {
+            background-color: rgb(83, 206, 83);
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            color: black;
+        }
+        select {
+          width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Calculadora para la Nómina Docentes Ocasionales UPC</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Títulos de Estudios Universitarios</h2>
+            <p>-Por título de postgrado:</p>
+            <p>Especializaciones (Incluye subespecializaciones clínicas o médicas)</p>
+            <table>
+                <tr>
+                    <th>Postgrados</th>
+                    <th>Número de Postgrados</th>
+                </tr>
+                <tr>
+                    <td>Especialización en clínicas en medicina humana y odontología</td>
+                    <td>
+                        <select id="especializacionClinicas">
+                            <option value="0" selected>Seleccionar</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Especialización en otras áreas</td>
+                    <td>
+                        <select id="especializacionOtrasAreas">
+                            <option value="0" selected>Seleccionar</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Maestría</td>
+                    <td>
+                        <select id="maestria">
+                            <option value="0" selected>Seleccionar</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Doctorado</td>
+                    <td>
+                        <select id="doctorado">
+                            <option value="0" selected>Seleccionar</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Categoría Docente</h2>
+            <form>
+                <label>
+                    <input type="radio" name="categoria" value="27" checked> Auxiliar
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="categoria" value="58"> Asistente
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="categoria" value="74"> Asociado
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="categoria" value="96"> Titular
+                </label>
+                <br>
+                <h3>Dedicación</h3>
+                <label>
+                    <input type="radio" name="tiempo" value="mt" checked> Medio tiempo
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="tiempo" value="tc"> Tiempo completo
+                </label>
+                <br>
+            </form>
+        </section>
+
+        <section>
+            <h2>Experiencia Calificada y Certificada</h2>
+            <table>
+                <tr>
+                    <th>Títulos</th>
+                    <th>Años</th>
+                </tr>
+                <tr>
+                    <td>Docente de tiempo completo</td>
+                    <td><input type="number" id="exp_tc"></td>
+                </tr>
+                <tr>
+                    <td>Docente de medio tiempo</td>
+                    <td><input type="number" id="exp_mt"></td>
+                </tr>
+                <tr>
+                    <td>Docente de cátedra</td>
+                    <td><input type="number" id="exp_catedra"></td>
+                </tr>
+                <tr>
+                    <td>Experiencia profesional</td>
+                    <td><input type="number" id="exp_profesional"></td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Producción Académica</h2>
+            <h3>Investigación</h3>
+            <p>Grupos de Investigación</p>
+            <p>(Si pertenece a más de 2 grupos, seleccione únicamente el grupo con mayor puntaje al que pertenece.)</p>
+            <form>
+                <label>
+                    <input type="radio" name="grupo" value="20"> A1
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="grupo" value="15"> A
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="grupo" value="12"> B
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="grupo" value="10"> C
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="grupo" value="6"> Reconocidos por Colciencias
+                </label>
+                <br>
+                <br>
+                <button type="button" onclick="deseleccionarRadios('grupo')">Deseleccionar</button>
+                <br>
+                <br>
+                <label>
+                    <input type="checkbox" name="semillero" id="semillero"> Semillero universitario
+                </label>
+            </form>
+
+            <h3>Categoría como Investigador</h3>
+            <form>
+                <label>
+                    <input type="radio" name="categoria_investigador" value="10"> Investigador Senior
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="categoria_investigador" value="5"> Investigador Asociado
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="categoria_investigador" value="3"> Investigador Junior
+                </label>
+                <br>
+                <br>
+                <button type="button" onclick="deseleccionarRadios('categoria_investigador')">Deseleccionar</button>
+
+            </form>
+
+            <h3>Publicaciones, Software y Patentes</h3>
+            <p>Artículo 18</p>
+            <p>Parágrafo 8: El puntaje para los libros y artículos solo se asignará a los últimos siete (7) años.</p>
+            <p>Parágrafo 9: El puntaje para software se asignará si está registrado en la dirección nacional de derechos de autor y si para su desarrollo se usó herramientas con licencia comercial, se requiere la autorización del uso correspondiente.</p>
+            <form>
+                <table>
+                    <tr>
+                        <th>Publicaciones, Software y Patentes</th>
+                        <th>Número de Obras</th>
+                    </tr>
+                    <tr>
+                        <td>Artículos en revistas indexadas por Colciencias</td>
+                        <td><input type="number" id="articulos_colciencias"></td>
+                    </tr>
+                    <tr>
+                        <td>Artículos en medios reconocidos (ISSN o ISBN)</td>
+                        <td><input type="number" id="articulos_ISSN"></td>
+                    </tr>
+                    <tr>
+                        <td>Libros en ISBN</td>
+                        <td><input type="number" id="libros_ISBN"></td>
+                    </tr>
+                    <tr>
+                        <td>Participación en capítulos de libros con ISBN</td>
+                        <td><input type="number" id="capitulos"></td>
+                    </tr>
+                    <tr>
+                        <td>Modelos de ISBN</td>
+                        <td><input type="number" id="modelos"></td>
+                    </tr>
+                    <tr>
+                        <td>Software registrado con derechos de autor</td>
+                        <td><input type="number" id="software"></td>
+                    </tr>
+                    <tr>
+                        <td>Patentes</td>
+                        <td><input type="number" id="patentes"></td>
+                    </tr>
+                    <tr>
+                        <td>Asesor de monografías o proyectos de grado</td>
+                        <td><input type="number" id="asesor_proyectos"></td>
+                    </tr>
+                    <tr>
+                        <td>Asesorías de prácticas como opción de grado</td>
+                        <td><input type="number" id="asesor_practicas"></td>
+                    </tr>
+                </table>
+            </form>
+        </section>
+
+        
+        <div class="result">
+            <p id="salarioTotal">Salario Total: </p>
+            <p id="salarioBase">Salario Base: </p>
+            <p id="bonificaciones">Bonificaciones: </p>
+            <p id="valorTotalPuntos">Valor Total de Puntos: </p>
+            <p id="puntosPostgrado">Puntos por Postgrado: </p>
+            <p id="puntosCategoria">Puntos por Categoría: </p>
+            <p id="puntosExperiencia">Puntos por Experiencia: </p>
+            <p id="puntosProduccionAcademica">Puntos por Producción Académica: </p>
+            <button onclick="calcularSalario()">Calcular Salario</button>
+        </div>
+    </main>
+
+    <script src="assets/js/calculoOcasional.js"></script>
+    <script>
+        function deseleccionarRadios(name) {
+            const radios = document.getElementsByName(name);
+            radios.forEach(radio => {
+                radio.checked = false;
+            });
+        }
+    </script>
+</body>
+</html>
